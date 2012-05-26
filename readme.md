@@ -12,7 +12,7 @@ So it will comes with:
 
 ### Examples
 
-<code>
+<pre>
 // Create a table
 // ---------------------
 // First param = tablename
@@ -24,4 +24,4 @@ DB::Create.table "persons",["id:primary","last_name","first_name","age"],true
 // First param = tablename
 // Second param = row content (primary key should have just an empty string)
 DB::Insert.new "test",["","Weiler","Hendrik"]
-</code>
+</pre>
