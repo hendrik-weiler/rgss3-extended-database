@@ -10,56 +10,55 @@ So it will comes with:
 
 ### Examples
 
-<pre class="ruby">
-// Create a table
-// ---------------------
-// First param = tablename
-// Second param = table columns
-// Third param = primary key have auto increement?
+```ruby
+# Create a table
+# ---------------------
+# First param = tablename
+# Second param = table columns
+# Third param = primary key have auto increement?
 DB::Create.table "persons",["id:primary","last_name","first_name","age"],true
 
-// Insert a row into a table
-// ---------------------
-// First param = tablename
-// Second param = row content (primary key should have just an empty string)
+# Insert a row into a table
+# ---------------------
+# First param = tablename
+# Second param = row content (primary key should have just an empty string)
 DB::Insert.new "persons",["","Weiler","Hendrik"]
 
-// Select some rows
-// ---------------------
-// First param = tablename
-// Second param = whether row primary id, hash or "all"
-// Third param = optional, you do "column asc" or "column desc" 
-// ---------------------
-// will return an array of elements
+# Select some rows
+# ---------------------
+# First param = tablename
+# Second param = whether row primary id, hash or "all"
+# Third param = optional, you do "column asc" or "column desc" 
+# ---------------------
+# will return an array of elements
 DB::Select.find "persons", {"last_name" => "Weiler"}
-// will return the specific element
+# will return the specific element
 DB::Select.find "persons", 2
-// will return an array of elements
+# will return an array of elements
 DB::Select.find "persons", "all"
-// will return an array of elements in descending order
+# will return an array of elements in descending order
 DB::Select.find "persons", {"last_name" => "Weiler"},"last_name desc"
 
-// Editing rows
-// ---------------------
+# Editing rows
+# ---------------------
 myrow = DB::Select.find "persons", 2
 myrow.last_name = "Power"
 myrow.first_name = "Max"
-// use the save method to edit the row
+# use the save method to edit the row
 myrow.save
-// use the delete method to delete the row
+# use the delete method to delete the row
 myrow.delete
 
-// Set global variables in rpg maker
+# Set global variables in rpg maker
 myrow = DB::Select.find "persons", 2
-// first param : var number, second param: value
+# first param : var number, second param: value
 Db.set_var 0, myrow.last_name
-
-// Set all column values into global variables in rpg maker
+# Set all column values into global variables in rpg maker
 myrow = DB::Select.find "persons", 2
-// first param : starting point, second param: result obj
+# first param : starting point, second param: result obj
 Db.set_var_row 0, myrow
-// now variable 0,1,2 are filled with the row values
-</pre>
+# now variable 0,1,2 are filled with the row values
+```
 
 ### Testing
 
