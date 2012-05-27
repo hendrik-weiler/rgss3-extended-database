@@ -2,7 +2,8 @@ module DB
   class Insert
     def initialize table,values
       if Dir.exists? 'Database/' + table
-        File.open('Database/' + table + '/data', 'a') { |data|
+        data_content = File.read('Database/' + table + '/data').split("\n")
+        File.open('Database/' + table + '/data', 'w') { |data|
           f = File.read('Database/' + table + '/columns') 
           columns = f.split "|"
           columns.each_with_index do |value,key|
@@ -16,7 +17,8 @@ module DB
               }
             end
           end
-          data.puts values.join("|")
+          data_content << values.join("|")
+          data.write( data_content.join "\n" )
         }
       end
     end
