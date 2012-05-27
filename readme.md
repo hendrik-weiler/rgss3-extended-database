@@ -2,11 +2,13 @@
 
 This script will give the vx ace real database support.
 
-So it will comes with:
+##### So it will come with:
 * Basic CRUD
 * Tables with Auto-Increement
 * Advanced search with ==,<=,>=,<,>,!=,*=(is_included?)
 * Sort ASC, DESC
+* Multiple databases
+* ini parser
 
 ### Examples
 
@@ -52,13 +54,30 @@ myrow.delete
 # Set global variables in rpg maker
 myrow = DB::Select.find "persons", 2
 # first param : var number, second param: value
-Db.set_var 0, myrow.last_name
+DB.set_var 0, myrow.last_name
 # Set all column values into global variables in rpg maker
 myrow = DB::Select.find "persons", 2
 # first param : starting point, second param: result obj
-Db.set_var_row 0, myrow
+DB.set_var_row 0, myrow
 # now variable 0,1,2 are filled with the row values
+
+# using configs class ini parser 
+value = DB::Config.get "groupname.variable"
+value2 = DB::Config.get "variable"
+# setting configs a new
+DB::Config.set "variable","some value"
 ```
+
+#### Using multiple databases
+```ruby
+# create a database
+DB::Create.database "some_database_name"
+
+# select that database
+DB::Config.set "database.selected_db","some_database_name"
+```
+
+Now everything will be will be executed in "some_database_name" database.
 
 ### Testing
 

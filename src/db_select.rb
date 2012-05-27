@@ -4,13 +4,13 @@ module DB
       
       @sort = sort
       @table = table
-      @columns = File.read('Database/' + table + '/columns').split("\n")[0].split('|')
+      @columns = File.read(DB::Config.get("database.selected_db") + '/' + table + '/columns').split("\n")[0].split('|')
       @records = []
-      File.read('Database/' + table + '/data').split("\n").each_with_index do |value,line|
+      File.read(DB::Config.get("database.selected_db") + '/' + table + '/data').split("\n").each_with_index do |value,line|
         @records << { :data => value, :line => line }
       end
       @primary_col = "none";
-      cols = File.read( 'Database/' + table + "/columns")
+      cols = File.read( DB::Config.get("database.selected_db") + '/' + table + "/columns")
       cols.split("|").each_with_index do |col,index|
         if col.include? ":primary"
           @primary_col = index

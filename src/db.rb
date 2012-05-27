@@ -21,7 +21,7 @@
 =end
 module DB
 	def self.version
-		1.00
+		1.1
 	end
 
 	def self.set_var num, value

@@ -41,19 +41,102 @@ module DB
 	end
 end
 module DB
+  class Config
+  	@configfile = "rgss3edb.conf"
+  	@@config = {}
+
+  	def self.parse file
+  		@variables = {}
+  		content = File.read(@configfile)
+  		current_group = false
+  		content.split("\n").each do |line|
+  			if /\[(.*)\]/i.match(line)
+  				name = line.gsub("[","").gsub("]","")
+  				@variables[name] = {}
+  				current_group = name
+  			else
+  				if line == ''
+  					current_group = false
+  					next
+  				end
+  				if(current_group != false)
+  					data = line.split("=")
+  					@variables[current_group][data[0].strip] = data[1].strip
+  				else
+					data = line.split("=")
+  					@variables[data[0].strip] = data[1].strip
+  				end
+  			end
+  		end
+  		@variables
+  	end
+
+  	def self.read
+  		if !File.exists? @configfile
+  			File.open(@configfile,"w") do |file|
+  				file.write(
+  					"[database]\n" +
+  					"selected_db = Database"
+  				)
+  			end
+  		end
+  		@@config = self.parse @configfile
+  		if !Dir.exists? get("database.selected_db")
+  			Dir.mkdir( get("database.selected_db") )
+  		end
+  	end
+
+  	def self.init
+  		read
+  		@@config
+  	end
+
+  	def self.get selector
+  		selecting = @variables
+  		data = selector.split(".")
+  		depth = data.length
+  		if depth == 1
+  			@variables[data[0]]
+  		end
+  		if depth == 2
+  			@variables[data[0]][data[1]]
+  		end
+  	end
+
+  	def self.set key, value
+  		data = key.split(".")
+  		depth = data.length
+  		if depth == 1
+  			@variables[data[0]] = value
+  		end
+  		if depth == 2
+  			@variables[data[0]][data[1]] = value
+  		end
+  	end
+  end
+  Config.init
+end
+module DB
   class Create
     def self.table name,columns,autoincreement
-      if !Dir.exists? 'Database/' + name
-        Dir.mkdir 'Database/' + name
-        File.open( 'Database/' + name + "/columns", "w" ) do |the_file|
+      selected_db = DB::Config.get("database.selected_db")
+      if !Dir.exists? selected_db + '/' + name
+        Dir.mkdir selected_db + '/' + name
+        File.open( selected_db + '/' + name + "/columns", "w" ) do |the_file|
           the_file.puts columns.join "|"
         end 
-        File.open( 'Database/' + name + "/data", "w" )
+        File.open( selected_db + '/' + name + "/data", "w" )
         if autoincreement
-          File.open( 'Database/' + name + "/increement", "w" ) do |file|
+          File.open( selected_db + '/' + name + "/increement", "w" ) do |file|
             file.write("0")
           end
         end
+      end
+    end
+
+    def self.database name
+      if !Dir.exists? name
+        Dir.mkdir name
       end
     end
   end
@@ -63,18 +146,19 @@ end
 module DB
   class Insert
     def initialize table,values
-      if Dir.exists? 'Database/' + table
-        data_content = File.read('Database/' + table + '/data').split("\n")
-        File.open('Database/' + table + '/data', 'w') { |data|
-          f = File.read('Database/' + table + '/columns') 
+      selected_db = DB::Config.get("database.selected_db")
+      if Dir.exists? selected_db + '/' + table
+        data_content = File.read(selected_db + '/' + table + '/data').split("\n")
+        File.open(selected_db + '/' + table + '/data', 'w') { |data|
+          f = File.read(selected_db + '/' + table + '/columns') 
           columns = f.split "|"
           columns.each_with_index do |value,key|
             if value.include?(":primary")
-              inc = File.open('Database/' + table + '/increement','r')
+              inc = File.open(selected_db + '/' + table + '/increement','r')
               inc = inc.read.to_i
               inc = inc+=1
               values[key] = inc
-              File.open('Database/' + table + '/increement', 'w') { |inc_file| 
+              File.open(selected_db + '/' + table + '/increement', 'w') { |inc_file| 
                 inc_file.write(inc) 
               }
             end
@@ -95,13 +179,13 @@ module DB
       
       @sort = sort
       @table = table
-      @columns = File.read('Database/' + table + '/columns').split("\n")[0].split('|')
+      @columns = File.read(DB::Config.get("database.selected_db") + '/' + table + '/columns').split("\n")[0].split('|')
       @records = []
-      File.read('Database/' + table + '/data').split("\n").each_with_index do |value,line|
+      File.read(DB::Config.get("database.selected_db") + '/' + table + '/data').split("\n").each_with_index do |value,line|
         @records << { :data => value, :line => line }
       end
       @primary_col = "none";
-      cols = File.read( 'Database/' + table + "/columns")
+      cols = File.read( DB::Config.get("database.selected_db") + '/' + table + "/columns")
       cols.split("|").each_with_index do |col,index|
         if col.include? ":primary"
           @primary_col = index
@@ -251,7 +335,7 @@ module DB
   class Update
     
     def initialize table,line,data,primary_col
-      f = File.read('Database/' + table + '/columns') 
+      f = File.read(DB::Config.get("database.selected_db") + '/' + table + '/columns') 
       @table = table
       @line = line
       @columns = f.split("\n")[0].split("|")
@@ -275,23 +359,23 @@ module DB
         new_values << instance_variable_get('@' + @columns[key]).encode('UTF-8')
       end
       
-      current_data = File.read('Database/' + @table + '/data')
+      current_data = File.read(DB::Config.get("database.selected_db") + '/' + @table + '/data')
       current_data = current_data.split "\n"
       
       current_data[@line] = new_values.join "|"
       
-      File.open('Database/' + @table + '/data',"w") do |the_file|
+      File.open(DB::Config.get("database.selected_db") + '/' + @table + '/data',"w") do |the_file|
         the_file.write(current_data.join("\n"))
       end
     end
     
     def delete
-      current_data = File.read('Database/' + @table + '/data')
+      current_data = File.read(DB::Config.get("database.selected_db") + '/' + @table + '/data')
       current_data = current_data.split "\n"
 
       current_data.delete_at(@line)
       
-      File.open('Database/' + @table + '/data',"w") do |the_file|
+      File.open(DB::Config.get("database.selected_db") + '/' + @table + '/data',"w") do |the_file|
         the_file.write(current_data.join("\n"))
       end
     end

@@ -2,7 +2,7 @@ module DB
   class Update
     
     def initialize table,line,data,primary_col
-      f = File.read('Database/' + table + '/columns') 
+      f = File.read(DB::Config.get("database.selected_db") + '/' + table + '/columns') 
       @table = table
       @line = line
       @columns = f.split("\n")[0].split("|")
@@ -26,23 +26,23 @@ module DB
         new_values << instance_variable_get('@' + @columns[key]).encode('UTF-8')
       end
       
-      current_data = File.read('Database/' + @table + '/data')
+      current_data = File.read(DB::Config.get("database.selected_db") + '/' + @table + '/data')
       current_data = current_data.split "\n"
       
       current_data[@line] = new_values.join "|"
       
-      File.open('Database/' + @table + '/data',"w") do |the_file|
+      File.open(DB::Config.get("database.selected_db") + '/' + @table + '/data',"w") do |the_file|
         the_file.write(current_data.join("\n"))
       end
     end
     
     def delete
-      current_data = File.read('Database/' + @table + '/data')
+      current_data = File.read(DB::Config.get("database.selected_db") + '/' + @table + '/data')
       current_data = current_data.split "\n"
 
       current_data.delete_at(@line)
       
-      File.open('Database/' + @table + '/data',"w") do |the_file|
+      File.open(DB::Config.get("database.selected_db") + '/' + @table + '/data',"w") do |the_file|
         the_file.write(current_data.join("\n"))
       end
     end
