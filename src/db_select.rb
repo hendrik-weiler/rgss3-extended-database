@@ -145,7 +145,7 @@ module DB
       return false if @primary_col == 'none'
       @records.each do |row|
         items = row[:data].split "|"
-        if items[@primary_col].to_s.include? id_number.to_s
+        if items[@primary_col].to_i == id_number
           return row[:line]
         end
       end

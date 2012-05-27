@@ -24,6 +24,21 @@ module DB
 	def self.version
 		1.00
 	end
+
+	def self.set_var num, value
+		$game_variables[num] = value
+	end
+
+	def self.set_var_row num_start, obj
+		obj.get_columns.each do |col|
+			$game_variables[num_start] = obj.instance_variable_get('@' + col)
+			num_start += 1
+		end
+	end
+
+	def self.set_sw num, value
+		$game_switches[num] = value
+	end
 end
 module DB
   class Create
@@ -221,7 +236,7 @@ module DB
       return false if @primary_col == 'none'
       @records.each do |row|
         items = row[:data].split "|"
-        if items[@primary_col].to_s.include? id_number.to_s
+        if items[@primary_col].to_i == id_number
           return row[:line]
         end
       end
@@ -247,6 +262,11 @@ module DB
         self.class.__send__(:attr_accessor, value)
         self.__send__(value + "=", @values[key])
       end
+      self
+    end
+
+    def get_columns
+      @columns
     end
     
     def save

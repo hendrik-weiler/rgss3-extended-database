@@ -10,7 +10,7 @@ So it will comes with:
 
 ### Examples
 
-<pre>
+<pre class="ruby">
 // Create a table
 // ---------------------
 // First param = tablename
@@ -48,6 +48,17 @@ myrow.first_name = "Max"
 myrow.save
 // use the delete method to delete the row
 myrow.delete
+
+// Set global variables in rpg maker
+myrow = DB::Select.find "persons", 2
+// first param : var number, second param: value
+Db.set_var 0, myrow.last_name
+
+// Set all column values into global variables in rpg maker
+myrow = DB::Select.find "persons", 2
+// first param : starting point, second param: result obj
+Db.set_var_row 0, myrow
+// now variable 0,1,2 are filled with the row values
 </pre>
 
 ### Testing

@@ -13,6 +13,11 @@ module DB
         self.class.__send__(:attr_accessor, value)
         self.__send__(value + "=", @values[key])
       end
+      self
+    end
+
+    def get_columns
+      @columns
     end
     
     def save
