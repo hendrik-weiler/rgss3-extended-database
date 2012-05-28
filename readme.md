@@ -23,6 +23,10 @@ RGSS3EDB.version
 # Third param = primary key have auto increement?
 DB.create_table "persons",["id:primary","last_name","first_name","age"],true
 
+# Clear a table
+# ---------------------
+DB.drop_table "persons"
+
 # Insert a row into a table
 # ---------------------
 # First param = tablename
@@ -84,6 +88,13 @@ DB.create_database "some_database_name"
 
 # select that database
 DB.set_config "database.selected_db","some_database_name"
+
+# interact with database directly
+DB.find "database.table","all"
+DB.insert "database.table",["a","b"]
+DB.create_table "database.table",[..some colnames..]
+DB.table_exists? "database.table"
+# ...and so on
 ```
 
 Now everything will be will be executed in "some_database_name" database.

@@ -1,8 +1,10 @@
 module RGSS3EDB
   class Update
+    attr_accessor :current_db
     
-    def initialize table,line,data,primary_col
-      f = File.read(Config.get("database.selected_db") + '/' + table + '/columns') 
+    def initialize table,line,data,primary_col,database
+      @current_db = database
+      f = File.read(@current_db + '/' + table + '/columns') 
       @table = table
       @line = line
       @columns = f.split("\n")[0].split("|")
@@ -26,23 +28,23 @@ module RGSS3EDB
         new_values << instance_variable_get('@' + @columns[key]).encode('UTF-8')
       end
       
-      current_data = File.read(Config.get("database.selected_db") + '/' + @table + '/data')
+      current_data = File.read(@current_db + '/' + @table + '/data')
       current_data = current_data.split "\n"
       
       current_data[@line] = new_values.join "|"
       
-      File.open(Config.get("database.selected_db") + '/' + @table + '/data',"w") do |the_file|
+      File.open(@current_db + '/' + @table + '/data',"w") do |the_file|
         the_file.write(current_data.join("\n"))
       end
     end
     
     def delete
-      current_data = File.read(Config.get("database.selected_db") + '/' + @table + '/data')
+      current_data = File.read(@current_db + '/' + @table + '/data')
       current_data = current_data.split "\n"
 
       current_data.delete_at(@line)
       
-      File.open(Config.get("database.selected_db") + '/' + @table + '/data',"w") do |the_file|
+      File.open(@current_db + '/' + @table + '/data',"w") do |the_file|
         the_file.write(current_data.join("\n"))
       end
     end

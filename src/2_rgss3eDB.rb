@@ -1,10 +1,14 @@
 module RGSS3EDB
 	def self.version
-		1.2
+		1.3
 	end
 
 	def self.set_var num, value
 		$game_variables[num] = value
+	end
+
+	def self.get_var num
+		$game_variables[num]
 	end
 
 	def self.set_var_row num_start, obj

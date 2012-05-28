@@ -2,6 +2,11 @@ module RGSS3EDB
   class Insert
     def initialize table,values
       selected_db = Config.get("database.selected_db")
+      if table.split('.').length == 2
+        table = table.split('.')
+        selected_db = table[0]
+        table = table[1]
+      end
       if Dir.exists? selected_db + '/' + table
         data_content = File.read(selected_db + '/' + table + '/data').split("\n")
         File.open(selected_db + '/' + table + '/data', 'w') { |data|

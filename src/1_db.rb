@@ -41,8 +41,24 @@ module DB
 		RGSS3EDB.set_var number,value
 	end
 
-	def self.set_var_obj start_number, obj
-		RGSS3EDB.set_var_obj start_number,obj
+	def self.get_var number
+		RGSS3EDB.get_var number
+	end
+
+	def self.drop_table tablename
+		RGSS3EDB::Create.drop_table tablename
+	end
+
+	def self.table_exists? tablename
+		RGSS3EDB::Create.table_exists? tablename
+	end
+
+	def self.database_exists? dbname
+		RGSS3EDB::Create.database_exists? tablename
+	end
+
+	def self.set_var_row start_number, obj
+		RGSS3EDB.set_var_row start_number,obj
 	end
 
 	def self.set_sw number, value

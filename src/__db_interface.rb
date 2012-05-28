@@ -15,11 +15,27 @@ module DB_Interface
 		raise NotImplementedError.new
 	end
 
+	def self.drop_table tablename
+		raise NotImplementedError.new
+	end
+
+	def self.table_exists? tablename
+		raise NotImplementedError.new
+	end
+
+	def self.database_exists? dbname
+		raise NotImplementedError.new
+	end
+
 	def self.set_var number, value
 		raise NotImplementedError.new
 	end
 
-	def self.set_var_obj start_number, obj
+	def self.get_var number
+		raise NotImplementedError.new
+	end
+
+	def self.set_var_row start_number, obj
 		raise NotImplementedError.new
 	end
 

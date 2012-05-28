@@ -3,14 +3,21 @@ module RGSS3EDB
     def self.find table, selector, sort="id none"
       
       @sort = sort
-      @table = table
-      @columns = File.read(Config.get("database.selected_db") + '/' + table + '/columns').split("\n")[0].split('|')
+      @selected_db = Config.get "database.selected_db"
+      if table.split('.').length == 2
+        table = table.split('.')
+        @selected_db = table[0]
+        @table = table[1]
+      else
+        @table = table
+      end
+      @columns = File.read(@selected_db + '/' + @table + '/columns').split("\n")[0].split('|')
       @records = []
-      File.read(Config.get("database.selected_db") + '/' + table + '/data').split("\n").each_with_index do |value,line|
+      File.read(@selected_db + '/' + @table + '/data').split("\n").each_with_index do |value,line|
         @records << { :data => value, :line => line }
       end
       @primary_col = "none";
-      cols = File.read( Config.get("database.selected_db") + '/' + table + "/columns")
+      cols = File.read( @selected_db + '/' + @table + "/columns")
       cols.split("|").each_with_index do |col,index|
         if col.include? ":primary"
           @primary_col = index
@@ -66,7 +73,7 @@ module RGSS3EDB
     end
     
     def self.return_update_obj line
-      Update.new @table, line, @records[line], @primary_col
+      Update.new @table, line, @records[line], @primary_col, @selected_db
     end
     
     def self.get_all_records
