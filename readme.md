@@ -44,8 +44,8 @@ DB::Select.find "persons", {"age" => ">=20"},"last_name desc"
 DB::Select.find "persons", {"age" => ">20"},"last_name desc"
 DB::Select.find "persons", {"age" => "<=20"},"last_name desc"
 DB::Select.find "persons", {"age" => "<20"},"last_name desc"
-DB::Select.find "persons", {"age" => "!=Weiler"},"last_name desc"
-DB::Select.find "persons", {"age" => "*=ler"},"last_name desc"
+DB::Select.find "persons", {"last_name" => "!=Weiler"},"last_name desc"
+DB::Select.find "persons", {"last_name" => "*=ler"},"last_name desc"
 
 # Editing rows
 # ---------------------

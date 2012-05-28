@@ -11,7 +11,7 @@ module DB
       @values = data[:data].split("|")
       @columns.each_with_index do |value,key|
         self.class.__send__(:attr_accessor, value)
-        self.__send__(value + "=", @values[key])
+        self.__send__(value + "=", @values[key].split('<br>').join("\n"))
       end
       self
     end

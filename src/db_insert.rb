@@ -18,6 +18,9 @@ module DB
               }
             end
           end
+          values.each_with_index do |value,key|
+            values[key] = value.split("\n").join('<br>') if value.is_a? String
+          end 
           data_content << values.join("|")
           data.write( data_content.join "\n" )
         }
