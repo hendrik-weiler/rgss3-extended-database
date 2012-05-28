@@ -1,6 +1,6 @@
 module RGSS3EDB
 	def self.version
-		1.1
+		1.2
 	end
 
 	def self.set_var num, value

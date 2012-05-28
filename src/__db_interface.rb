@@ -14,4 +14,24 @@ module DB_Interface
 	def self.create_database name
 		raise NotImplementedError.new
 	end
+
+	def self.set_var number, value
+		raise NotImplementedError.new
+	end
+
+	def self.set_var_obj start_number, obj
+		raise NotImplementedError.new
+	end
+
+	def self.set_sw number, value
+		raise NotImplementedError.new
+	end
+
+	def self.set_config expr, value
+		raise NotImplementedError.new
+	end
+
+	def self.get_config expr
+		raise NotImplementedError.new
+	end
 end

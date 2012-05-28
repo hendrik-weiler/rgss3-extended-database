@@ -13,18 +13,21 @@ This script will give the vx ace real database support.
 ### Examples
 
 ```ruby
+# getting version
+RGSS3EDB.version
+
 # Create a table
 # ---------------------
 # First param = tablename
 # Second param = table columns
 # Third param = primary key have auto increement?
-DB::Create.table "persons",["id:primary","last_name","first_name","age"],true
+DB.create_table "persons",["id:primary","last_name","first_name","age"],true
 
 # Insert a row into a table
 # ---------------------
 # First param = tablename
 # Second param = row content (primary key should have just an empty string)
-DB::Insert.new "persons",["","Weiler","Hendrik"]
+DB.insert "persons",["","Weiler","Hendrik"]
 
 # Select some rows
 # ---------------------
@@ -33,23 +36,23 @@ DB::Insert.new "persons",["","Weiler","Hendrik"]
 # Third param = optional, you do "column asc" or "column desc" 
 # ---------------------
 # will return an array of elements
-DB::Select.find "persons", {"last_name" => "Weiler"}
+DB.find "persons", {"last_name" => "Weiler"}
 # will return the specific element
-DB::Select.find "persons", 2
+DB.find "persons", 2
 # will return an array of elements
-DB::Select.find "persons", "all"
+DB.find "persons", "all"
 # will return an array of elements in descending order
-DB::Select.find "persons", {"last_name" => "Weiler"},"last_name desc"
-DB::Select.find "persons", {"age" => ">=20"},"last_name desc"
-DB::Select.find "persons", {"age" => ">20"},"last_name desc"
-DB::Select.find "persons", {"age" => "<=20"},"last_name desc"
-DB::Select.find "persons", {"age" => "<20"},"last_name desc"
-DB::Select.find "persons", {"last_name" => "!=Weiler"},"last_name desc"
-DB::Select.find "persons", {"last_name" => "*=ler"},"last_name desc"
+DB.find "persons", {"last_name" => "Weiler"},"last_name desc"
+DB.find "persons", {"age" => ">=20"},"last_name desc"
+DB.find "persons", {"age" => ">20"},"last_name desc"
+DB.find "persons", {"age" => "<=20"},"last_name desc"
+DB.find "persons", {"age" => "<20"},"last_name desc"
+DB.find "persons", {"last_name" => "!=Weiler"},"last_name desc"
+DB.find "persons", {"last_name" => "*=ler"},"last_name desc"
 
 # Editing rows
 # ---------------------
-myrow = DB::Select.find "persons", 2
+myrow = DB.find "persons", 2
 myrow.last_name = "Power"
 myrow.first_name = "Max"
 # use the save method to edit the row
@@ -58,29 +61,29 @@ myrow.save
 myrow.delete
 
 # Set global variables in rpg maker
-myrow = DB::Select.find "persons", 2
+myrow = DB.find "persons", 2
 # first param : var number, second param: value
 DB.set_var 0, myrow.last_name
 # Set all column values into global variables in rpg maker
-myrow = DB::Select.find "persons", 2
+myrow = DB.find "persons", 2
 # first param : starting point, second param: result obj
 DB.set_var_row 0, myrow
 # now variable 0,1,2 are filled with the row values
 
 # using configs class ini parser 
-value = DB::Config.get "groupname.variable"
-value2 = DB::Config.get "variable"
+value = DB.get_config "groupname.variable"
+value2 = DB.get_config "variable"
 # setting configs a new
-DB::Config.set "variable","some value"
+DB.set_config "variable","some value"
 ```
 
 #### Using multiple databases
 ```ruby
 # create a database
-DB::Create.database "some_database_name"
+DB.create_database "some_database_name"
 
 # select that database
-DB::Config.set "database.selected_db","some_database_name"
+DB.set_config "database.selected_db","some_database_name"
 ```
 
 Now everything will be will be executed in "some_database_name" database.

@@ -36,4 +36,24 @@ module DB
 	def self.create_database name
 		RGSS3EDB::Create.database name
 	end
+
+	def self.set_var number, value
+		RGSS3EDB.set_var number,value
+	end
+
+	def self.set_var_obj start_number, obj
+		RGSS3EDB.set_var_obj start_number,obj
+	end
+
+	def self.set_sw number, value
+		RGSS3EDB.set_sw number, value
+	end
+
+	def self.set_config expr, value
+		RGSS3EDB::Config.set expr, value
+	end
+
+	def self.get_config expr
+		RGSS3EDB::Config.get expr
+	end
 end
