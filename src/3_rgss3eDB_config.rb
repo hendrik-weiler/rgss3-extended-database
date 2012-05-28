@@ -1,4 +1,4 @@
-module DB
+module RGSS3EDB
   class Config
   	@configfile = "rgss3edb.conf"
   	@@config = {}

@@ -20,22 +20,20 @@
  @copyright  2012 Hendrik Weiler
 =end
 module DB
-	def self.version
-		1.1
+	def self.find table, selector, order=false
+		order = 'id none' if !order
+		RGSS3EDB::Select.find table, selector, order
 	end
 
-	def self.set_var num, value
-		$game_variables[num] = value
+	def self.insert table, data_array
+		RGSS3EDB::Insert.new table, data_array
 	end
 
-	def self.set_var_row num_start, obj
-		obj.get_columns.each do |col|
-			$game_variables[num_start] = obj.instance_variable_get('@' + col)
-			num_start += 1
-		end
+	def self.create_table name, column_array, auto_increement=false
+		RGSS3EDB::Create.table name, column_array, auto_increement
 	end
 
-	def self.set_sw num, value
-		$game_switches[num] = value
+	def self.create_database name
+		RGSS3EDB::Create.database name
 	end
 end

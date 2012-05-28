@@ -1,7 +1,7 @@
-module DB
+module RGSS3EDB
   class Create
     def self.table name,columns,autoincreement
-      selected_db = DB::Config.get("database.selected_db")
+      selected_db = Config.get("database.selected_db")
       if !Dir.exists? selected_db + '/' + name
         Dir.mkdir selected_db + '/' + name
         File.open( selected_db + '/' + name + "/columns", "w" ) do |the_file|

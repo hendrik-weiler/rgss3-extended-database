@@ -1,7 +1,7 @@
-module DB
+module RGSS3EDB
   class Insert
     def initialize table,values
-      selected_db = DB::Config.get("database.selected_db")
+      selected_db = Config.get("database.selected_db")
       if Dir.exists? selected_db + '/' + table
         data_content = File.read(selected_db + '/' + table + '/data').split("\n")
         File.open(selected_db + '/' + table + '/data', 'w') { |data|
