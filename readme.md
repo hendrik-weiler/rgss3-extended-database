@@ -40,6 +40,12 @@ DB::Select.find "persons", 2
 DB::Select.find "persons", "all"
 # will return an array of elements in descending order
 DB::Select.find "persons", {"last_name" => "Weiler"},"last_name desc"
+DB::Select.find "persons", {"age" => ">=20"},"last_name desc"
+DB::Select.find "persons", {"age" => ">20"},"last_name desc"
+DB::Select.find "persons", {"age" => "<=20"},"last_name desc"
+DB::Select.find "persons", {"age" => "<20"},"last_name desc"
+DB::Select.find "persons", {"age" => "!=Weiler"},"last_name desc"
+DB::Select.find "persons", {"age" => "*=ler"},"last_name desc"
 
 # Editing rows
 # ---------------------
