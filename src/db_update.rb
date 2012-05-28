@@ -7,7 +7,7 @@ module DB
       @line = line
       @columns = f.split("\n")[0].split("|")
       @columns.delete_at @columns.length
-      @columns[primary_col] = @columns[primary_col].gsub(":primary","")
+      @columns[primary_col] = @columns[primary_col].gsub(":primary","") if primary_col.is_a? Integer
       @values = data[:data].split("|")
       @columns.each_with_index do |value,key|
         self.class.__send__(:attr_accessor, value)
