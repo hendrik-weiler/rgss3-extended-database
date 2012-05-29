@@ -27,8 +27,16 @@ module RGSS3EDB
       if selector == 'all'
         return self.get_all_records
       end
+      if selector.is_a? Array
+        result = []
+        selector.each do |id|
+          record = self.get_record_by_id(id.to_i)
+          result << self.return_update_obj(record) if record != false
+        end
+        return result
+      end
       if selector.is_a? Integer
-        return self.return_update_obj (self.get_record_by_id selector)
+        return self.return_update_obj (self.get_record_by_id(selector.to_i))
       end
       if selector.is_a? Hash
         return self.get_record_by_hash selector

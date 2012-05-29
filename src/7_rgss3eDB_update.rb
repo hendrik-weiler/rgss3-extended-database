@@ -21,6 +21,12 @@ module RGSS3EDB
     def get_columns
       @columns
     end
+
+    def set_column name, value
+        @columns << name
+        self.class.__send__(:attr_accessor, name)
+        self.__send__(name + "=", value.split('<br>').join("\n"))
+    end
     
     def save
       new_values = []

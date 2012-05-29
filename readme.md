@@ -43,6 +43,8 @@ DB.insert "persons",["","Weiler","Hendrik"]
 DB.find "persons", {"last_name" => "Weiler"}
 # will return the specific element
 DB.find "persons", 2
+# select multiple ids and returns an array of elements
+DB.find "persons", [2,3,6]
 # will return an array of elements
 DB.find "persons", "all"
 # will return an array of elements in descending order
