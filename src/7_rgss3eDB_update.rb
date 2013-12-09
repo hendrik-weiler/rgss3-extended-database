@@ -13,6 +13,7 @@ module RGSS3EDB
       @values = data[:data].split("|")
       @columns.each_with_index do |value,key|
         self.class.__send__(:attr_accessor, value)
+        @values[key] = "" if @values[key].nil?
         self.__send__(value + "=", @values[key].split('<br>').join("\n"))
       end
       self

@@ -1,6 +1,6 @@
 ## RPG MAKER VX ACE Extended Database
 
-This script will give the vx ace real database support.
+This script will give the vx ace extended external database support.
 
 ##### So it will come with:
 * Basic CRUD
