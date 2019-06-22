@@ -32,7 +32,7 @@ module RGSS3EDB
     def save
       new_values = []
       @values.each_with_index do |value,key|
-        new_values << instance_variable_get('@' + @columns[key]).encode('UTF-8')
+        new_values << instance_variable_get('@' + @columns[key]).to_s.encode('UTF-8').gsub(/\n/, "<br>")
       end
       
       current_data = File.read(@current_db + '/' + @table + '/data')
